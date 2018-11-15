@@ -8,6 +8,8 @@ public class Timetable {
 
     private HashMap<Integer, Subject> subjects;
 
+    private int key = 0;
+
 
     public Timetable() {
         this.subjects = new HashMap<Integer, Subject>();
@@ -23,5 +25,9 @@ public class Timetable {
 
     public void setSubjects(HashMap<Integer, Subject> subjects) {
         this.subjects = subjects;
+    }
+
+    public void addSubject(Subject subject) {
+        subjects.put(key++, subject);
     }
 }

@@ -1,23 +1,44 @@
 package subjects;
 
+import java.time.LocalTime;
+
 public class Subject {
 
     private String subjectName;
 
     private int day;
 
-    private String time;
+    private LocalTime start;
+
+    private LocalTime end;
 
     private String classNumber;
 
     private String teacher;
 
-    public Subject(String subjectName, int day, String time, String classNumber, String teacher) {
+    public Subject(String subjectName, int day, LocalTime start, LocalTime end, String classNumber, String teacher) {
         this.subjectName = subjectName;
         this.day = day;
-        this.time = time;
+        this.start = start;
+        this.end = end;
         this.classNumber = classNumber;
         this.teacher = teacher;
+    }
+
+    public LocalTime getStart() {
+        return start;
+    }
+
+    public void setStart(LocalTime start) {
+        this.start = start;
+    }
+
+    public LocalTime getEnd() {
+        return end;
+    }
+
+    public void setEnd(LocalTime end) {
+        this.end = end;
     }
 
     public String getSubjectName() {
@@ -26,14 +47,6 @@ public class Subject {
 
     public void setSubjectName(String subjectName) {
         this.subjectName = subjectName;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 
     public String getClassNumber() {
