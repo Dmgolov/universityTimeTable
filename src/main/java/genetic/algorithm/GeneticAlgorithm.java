@@ -19,6 +19,10 @@ public class GeneticAlgorithm {
     private int generationCount = 0;
     private int generationsLimit;
 
+    // запоминать самый лучший вариант на протяжении всех поколений и его выдавать в качестве результата
+    // с самым максимальным фитнессом который был на протяжении работы алгоритма
+    // а то не всегда выдает максимально хороший вариант !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     public GeneticAlgorithm(int populationSize, int generationsLimit, SubjectStorage storage) {
         this.population = new Population(populationSize, storage);
         this.generationsLimit = generationsLimit;
@@ -113,7 +117,10 @@ public class GeneticAlgorithm {
 
         System.out.println("Generation: " + generationCount + " Fittest: " + population.getFittestValue());
 
-        int maxFitness = population.getTimetables()[0].getMaxFitness();
+        Timetable maxFitnessTimetable = new Timetable();
+        long maxFitnessValue = 0;
+
+        long maxFitness = population.getTimetables()[0].getMaxFitness();
 
         //While population does not get an individual with maximum fitness
         // and generation counter is smaller than generations number limit
@@ -137,19 +144,28 @@ public class GeneticAlgorithm {
             //Calculate new fitness value
             population.calculateFitness();
 
+            if (maxFitnessValue <= population.getFittest().getFitness()) {
+                maxFitnessValue = population.getFittest().getFitness();
+                // System.out.println(maxFitnessValue + "----------------------");
+                maxFitnessTimetable = population.getFittest().getDeepCopy();
+            }
+
             System.out.println("Generation: " + generationCount + " Fittest: " + population.getFittestValue());
         }
 
         System.out.println("\nSolution found in generation " + generationCount);
         System.out.println("Fitness: " + population.getFittest().getFitness() + "   Max Fitness: " + population.getTimetables()[0].getMaxFitness());
         System.out.println("Genes: ");
-//        for (int i = 0; i < 5; i++) {
-//            System.out.print(demo.population.getFittest().genes[i]);
-//        }
         population.getFittest().printTimetable();
 
         System.out.println("");
-        return population.getFittest();
+
+        System.out.println("\nMaximal fitness timetable:");
+        System.out.println("Fitness: " + maxFitnessTimetable.getFitness() + "   Max Fitness: " + population.getTimetables()[0].getMaxFitness());
+        System.out.println("Genes: ");
+        maxFitnessTimetable.printTimetable();
+
+        return maxFitnessTimetable;
     }
 
 }
