@@ -141,8 +141,8 @@ public class GeneticAlgorithm {
         }
 
         System.out.println("\nSolution found in generation " + generationCount);
-        System.out.println("Fitness: " + population.getFittest().getFitness());
-        System.out.print("Genes: ");
+        System.out.println("Fitness: " + population.getFittest().getFitness() + "   Max Fitness: " + population.getTimetables()[0].getMaxFitness());
+        System.out.println("Genes: ");
 //        for (int i = 0; i < 5; i++) {
 //            System.out.print(demo.population.getFittest().genes[i]);
 //        }

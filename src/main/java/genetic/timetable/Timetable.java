@@ -40,8 +40,7 @@ public class Timetable {
                 }
             }
         }
-        return new Subject("Subject not found by index", 0,
-                LocalTime.of(0, 0), LocalTime.of(0, 0));
+        return new Subject("Subject not found by index", 0, "00:00", "00:00");
     }
 
     // replaces subject located in timetable with given subject and returns old subject (which was in timetable)
@@ -59,8 +58,12 @@ public class Timetable {
                 }
             }
         }
-        return new Subject("Subject is missing", 0,
-                LocalTime.of(0, 0), LocalTime.of(0, 0));
+        return new Subject("Subject is missing", 0, "00:00", "00:00");
+    }
+
+    private boolean subjectsAreOverlapping(Subject s1, Subject s2) {
+        return s1.getStart().isBefore(s2.getBreakEnd()) &&
+                s2.getStart().isBefore(s1.getBreakEnd());
     }
 
     public void calculateFitness() {
@@ -78,8 +81,7 @@ public class Timetable {
                     // check if subjects are overlapping
                     // (if s1 end is 10:30 and s2 start is 10:30 then they are not overlapping)
                     // used https://stackoverflow.com/questions/17106670/how-to-check-a-timeperiod-is-overlapping-another-time-period-in-java
-                    if (day.get(i).getStart().isBefore(day.get(j).getBreakEnd()) &&
-                            day.get(j).getStart().isBefore(day.get(i).getBreakEnd())) {
+                    if (subjectsAreOverlapping(day.get(i), day.get(j))) {
                         dayConflicts++;
                     }
                     // compare subject and it's next subject if between them is time gap
@@ -131,15 +133,33 @@ public class Timetable {
     }
 
     public void printTimetable() {
+        String printColor = (char)27 + "[30m";
         for (Map.Entry<Integer, List<Subject>> day : days.entrySet()) {
             List<Subject> schedule = day.getValue();
-            for (Subject subject : schedule) {
-                System.out.printf("%d %tH:%tM - %tH:%tM - %tH:%tM   %s\n",
+            for (int i = 0; i < schedule.size(); i++) {
+
+                Subject subject = schedule.get(i);
+                if (i + 1 < schedule.size()) {
+                    Subject nextSubject = schedule.get(i + 1);
+                    if (subjectsAreOverlapping(subject, nextSubject)) {
+                        printColor = (char)27 + "[31m";
+                    }
+                } else if (schedule.size() > 1){
+                    Subject previousSubject = schedule.get(i - 1);
+                    if (subjectsAreOverlapping(previousSubject, subject)) {
+                        printColor = (char)27 + "[31m";
+                    }
+                }
+
+                System.out.printf("%s %d %tH:%tM - %tH:%tM - %tH:%tM   %s\n",
+                        printColor,
                         subject.getDay(), subject.getStart(), subject.getStart(),
                         subject.getEnd(), subject.getEnd(),
                         subject.getBreakEnd(), subject.getBreakEnd(), subject.getName());
+
+                printColor = (char)27 + "[30m";
             }
-            System.out.println("-------");
+            System.out.println((char)27 + "[30m" + "-------");
         }
     }
 }

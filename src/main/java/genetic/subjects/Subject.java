@@ -21,28 +21,35 @@ public class Subject {
 
     private String teacher;
 
-    public Subject(String name, int day, LocalTime start, LocalTime end) {
-        this.name = name;
-        this.day = day;
-        this.start = start;
-        this.end = end;
-        this.breakEnd = end;
+    private String adaptTimeFormat(String localTime) {
+        if (localTime.length() < 5) {
+            return "0" + localTime;
+        }
+        return localTime;
     }
 
-    public Subject(String name, int day, LocalTime start, LocalTime end, LocalTime breakEnd) {
+    public Subject(String name, int day, String start, String end) {
         this.name = name;
         this.day = day;
-        this.start = start;
-        this.end = end;
-        this.breakEnd = breakEnd;
+        this.start = LocalTime.parse(adaptTimeFormat(start));
+        this.end = LocalTime.parse(adaptTimeFormat(end));
+        this.breakEnd = LocalTime.parse(adaptTimeFormat(end));
     }
 
-    public Subject(String name, int day, LocalTime start, LocalTime end, String classNumber, String teacher) {
+    public Subject(String name, int day, String start, String end, String breakEnd) {
         this.name = name;
         this.day = day;
-        this.start = start;
-        this.end = end;
-        this.breakEnd = end;
+        this.start = LocalTime.parse(adaptTimeFormat(start));
+        this.end = LocalTime.parse(adaptTimeFormat(end));
+        this.breakEnd = LocalTime.parse(adaptTimeFormat(breakEnd));
+    }
+
+    public Subject(String name, int day, String start, String end, String classNumber, String teacher) {
+        this.name = name;
+        this.day = day;
+        this.start = LocalTime.parse(adaptTimeFormat(start));
+        this.end = LocalTime.parse(adaptTimeFormat(end));
+        this.breakEnd = LocalTime.parse(adaptTimeFormat(end));
         this.classNumber = classNumber;
         this.teacher = teacher;
     }
