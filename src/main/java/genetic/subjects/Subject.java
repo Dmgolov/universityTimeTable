@@ -13,6 +13,10 @@ public class Subject {
 
     private LocalTime end;
 
+    // time between end and breakEnd is free time which is needed after subject end.
+    // (for example break time between subjects, or time to drive to another location)
+    private LocalTime breakEnd;
+
     private String classNumber;
 
     private String teacher;
@@ -22,6 +26,15 @@ public class Subject {
         this.day = day;
         this.start = start;
         this.end = end;
+        this.breakEnd = end;
+    }
+
+    public Subject(String name, int day, LocalTime start, LocalTime end, LocalTime breakEnd) {
+        this.name = name;
+        this.day = day;
+        this.start = start;
+        this.end = end;
+        this.breakEnd = breakEnd;
     }
 
     public Subject(String name, int day, LocalTime start, LocalTime end, String classNumber, String teacher) {
@@ -29,6 +42,7 @@ public class Subject {
         this.day = day;
         this.start = start;
         this.end = end;
+        this.breakEnd = end;
         this.classNumber = classNumber;
         this.teacher = teacher;
     }
@@ -47,6 +61,14 @@ public class Subject {
 
     public void setEnd(LocalTime end) {
         this.end = end;
+    }
+
+    public LocalTime getBreakEnd() {
+        return breakEnd;
+    }
+
+    public void setBreakEnd(LocalTime breakEnd) {
+        this.breakEnd = breakEnd;
     }
 
     public String getName() {
