@@ -4,7 +4,6 @@ import genetic.storage.SubjectStorage;
 import genetic.subjects.Subject;
 import genetic.util.Utility;
 
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -13,9 +12,13 @@ public class Timetable {
     // subjects are used as genes
     private LinkedHashMap<Integer, List<Subject>> days = new LinkedHashMap<>();
 
-    private int fitness = 0;
+    private long fitness = 0;
 
-    private int maxFitness;
+    private long maxFitness;
+
+    private static final int CONFLICTS_WEIGHT = 3;
+    private static final int TIME_GAPS_WEIGHT = 1;
+    private static final int TIME_GAPS_DURATION_WEIGHT = 2;
 
     public Timetable() {
         // initialize lists in days HashMap
@@ -24,7 +27,22 @@ public class Timetable {
         }
     }
 
-    public int getFitness() {
+    public Timetable(LinkedHashMap<Integer, List<Subject>> days, long fitness, long maxFitness) {
+        this.days = days;
+        this.fitness = fitness;
+        this.maxFitness = maxFitness;
+    }
+
+    public Timetable getDeepCopy() {
+        LinkedHashMap<Integer, List<Subject>> days = new LinkedHashMap<>();
+        for (Map.Entry<Integer, List<Subject>> day : this.days.entrySet()) {
+            List<Subject> subjects = new ArrayList<>(day.getValue());
+            days.put(new Integer(day.getKey()), subjects);
+        }
+        return new Timetable(days, fitness, maxFitness);
+    }
+
+    public long getFitness() {
         return fitness;
     }
 
@@ -68,11 +86,17 @@ public class Timetable {
 
     public void calculateFitness() {
         fitness = 0;
-        int subjectsNumber = 0;
-        int maxConflicts;
-        int totalConflicts = 0;
-        int maxTimeGaps;
-        int totalTimeGaps = 0;
+        long subjectsNumber = 0;
+        // One conflict is one unit
+        long maxConflicts;
+        long totalConflicts = 0;
+        // One time gap is one unit
+        long maxTimeGaps;
+        long totalTimeGaps = 0;
+        // One minute is one unit
+        long maxOneTimeGapDuration = 1440; // 24 hour = 1440 minutes
+        long maxTimeGapsDuration;
+        long totalTimeGapsDuration = 0;
         for (List<Subject> day : days.values()) {
             long dayConflicts = 0;
             for (int i = 0; i < day.size(); i++) {
@@ -89,20 +113,41 @@ public class Timetable {
                     // used https://stackoverflow.com/questions/28353725/java-subtract-localtime
                     else if (j == i + 1 &&
                             ChronoUnit.SECONDS.between(day.get(i).getBreakEnd(), day.get(j).getStart()) > 0) {
+
                         totalTimeGaps++;
+
+                        totalTimeGapsDuration += ChronoUnit.MINUTES.between(day.get(i).getBreakEnd(), day.get(j).getStart());
                     }
                 }
             }
             totalConflicts += dayConflicts;
         }
-        maxConflicts = Utility.findCombinationsNumber(subjectsNumber, 2).intValue();
+
+        maxConflicts = Utility.findCombinationsNumber(subjectsNumber, 2).longValue();
         maxTimeGaps = subjectsNumber -1;
-        fitness = maxConflicts + maxTimeGaps - totalConflicts - totalTimeGaps;
-        maxFitness = maxConflicts + maxTimeGaps;
+        maxTimeGapsDuration = maxTimeGaps * maxOneTimeGapDuration;  // amount of time gaps multiplied by max duration of one time gap in minutes
+
+        // for conflicts, time gaps and time gaps duration units balance
+        // need to multiply max conflicts, conflicts and max time gaps, time gaps with max one time gap duration
+        maxConflicts *= maxOneTimeGapDuration;
+        totalConflicts *= maxOneTimeGapDuration;
+        maxTimeGaps *= maxOneTimeGapDuration;
+        totalTimeGaps *= maxOneTimeGapDuration;
+
+        // adding multipliers (weight) to conflict, time gap, time gap duration
+        maxConflicts *= CONFLICTS_WEIGHT;
+        totalConflicts *= CONFLICTS_WEIGHT;
+        maxTimeGaps *= TIME_GAPS_WEIGHT;
+        totalTimeGaps *= TIME_GAPS_WEIGHT;
+        maxTimeGapsDuration *= TIME_GAPS_DURATION_WEIGHT;
+        totalTimeGapsDuration *= TIME_GAPS_DURATION_WEIGHT;
+
+        fitness = maxConflicts + maxTimeGaps + maxTimeGapsDuration - totalConflicts - totalTimeGaps - totalTimeGapsDuration;
+        maxFitness = maxConflicts + maxTimeGaps + maxTimeGapsDuration;
         // System.out.println(maxConflicts + ", " + maxTimeGaps + ", " + totalConflicts + ", " + totalTimeGaps);
     }
 
-    public int getMaxFitness() {
+    public long getMaxFitness() {
         calculateFitness();
         return maxFitness;
     }
@@ -142,9 +187,10 @@ public class Timetable {
                 if (i + 1 < schedule.size()) {
                     Subject nextSubject = schedule.get(i + 1);
                     if (subjectsAreOverlapping(subject, nextSubject)) {
-                        printColor = (char)27 + "[31m";
+                        printColor = (char) 27 + "[31m";
                     }
-                } else if (schedule.size() > 1){
+                }
+                if (i - 1 >= 0){
                     Subject previousSubject = schedule.get(i - 1);
                     if (subjectsAreOverlapping(previousSubject, subject)) {
                         printColor = (char)27 + "[31m";
