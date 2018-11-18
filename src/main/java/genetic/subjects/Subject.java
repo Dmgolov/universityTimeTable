@@ -44,6 +44,14 @@ public class Subject {
         this.breakEnd = LocalTime.parse(adaptTimeFormat(breakEnd));
     }
 
+    public Subject(String name, int day, LocalTime start, LocalTime end, LocalTime breakEnd) {
+        this.name = name;
+        this.day = day;
+        this.start = start;
+        this.end = end;
+        this.breakEnd = breakEnd;
+    }
+
     public Subject(String name, int day, String start, String end, String classNumber, String teacher) {
         this.name = name;
         this.day = day;
