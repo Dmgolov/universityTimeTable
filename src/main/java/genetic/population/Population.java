@@ -7,7 +7,7 @@ public class Population {
 
     private int populationSize;
     private Timetable[] timetables;
-    private int fittestValue = 0;
+    private long fittestValue = 0;
     private SubjectStorage storage;
 
     public Population(int populationSize, SubjectStorage storage) {
@@ -28,7 +28,7 @@ public class Population {
         this.timetables = timetables;
     }
 
-    public int getFittestValue() {
+    public long getFittestValue() {
         return fittestValue;
     }
 
@@ -44,7 +44,7 @@ public class Population {
     }
 
     public Timetable getFittest() {
-        int maxFittestValue = Integer.MIN_VALUE;
+        long maxFittestValue = Integer.MIN_VALUE;
         int maxFittestIndex = 0;
         for (int i = 0; i < timetables.length; i++) {
             if (maxFittestValue <= timetables[i].getFitness()) {
@@ -71,7 +71,7 @@ public class Population {
     }
 
     public int getLeastFittestIndex() {
-        int minFitnessValue = Integer.MAX_VALUE;
+        long minFitnessValue = Integer.MAX_VALUE;
         int minFitnessIndex = 0;
         for (int i = 0; i < timetables.length; i++) {
             if (minFitnessValue >= timetables[i].getFitness()) {
