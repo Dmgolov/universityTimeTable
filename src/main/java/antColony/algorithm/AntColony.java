@@ -76,6 +76,7 @@ public class AntColony {
     /**
      * Perform ant optimization
      */
+
     public void startAntOptimization() {
         IntStream.rangeClosed(1, 3)
                 .forEach(i -> {

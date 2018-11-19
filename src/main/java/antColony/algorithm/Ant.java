@@ -93,6 +93,7 @@ public class Ant {
 //        }
 //        System.out.println(subjectHashMap.size());
 //        return subjectHashMap;
+
         HashMap<String, Subject> subjectHashMap = new HashMap<>();
         for (Subject subject : this.subjects){
             switch (subject.getDay()){
