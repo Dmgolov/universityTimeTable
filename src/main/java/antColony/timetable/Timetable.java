@@ -1,5 +1,6 @@
 package antColony.timetable;
 
+import antColony.algorithm.AntColony;
 import antColony.subjects.Subject;
 
 import java.util.HashMap;
@@ -8,6 +9,8 @@ import java.util.List;
 public class Timetable {
 
     private HashMap<String, Subject> timeTable = new HashMap<>();
+
+    AntColony antColony;
 
 
     public HashMap<String, Subject> initialTimetable(List<Subject> subjects) {

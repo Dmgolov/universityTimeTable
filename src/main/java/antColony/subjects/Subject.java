@@ -1,8 +1,9 @@
 package antColony.subjects;
 
 import java.time.LocalTime;
+import java.util.Comparator;
 
-public class Subject {
+public class Subject  {
 
     private String subjectName;
 
@@ -96,4 +97,7 @@ public class Subject {
     public void setDay(int day) {
         this.day = day;
     }
+
+
+
 }
