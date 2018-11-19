@@ -18,14 +18,14 @@ public class GeneticAlgorithm {
     private Timetable secondFittest;
     private int generationCount = 0;
     private int generationsLimit;
+    private long previousFittestValue = 0;
+    private int stepsAfterFittestValueChange = 0;
+    private int fromFittestValueChangeMaxSteps;
 
-    // запоминать самый лучший вариант на протяжении всех поколений и его выдавать в качестве результата
-    // с самым максимальным фитнессом который был на протяжении работы алгоритма
-    // а то не всегда выдает максимально хороший вариант !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    public GeneticAlgorithm(int populationSize, int generationsLimit, SubjectStorage storage) {
+    public GeneticAlgorithm(int populationSize, int generationsLimit, int fromFittestValueChangeMaxSteps, SubjectStorage storage) {
         this.population = new Population(populationSize, storage);
         this.generationsLimit = generationsLimit;
+        this.fromFittestValueChangeMaxSteps = fromFittestValueChangeMaxSteps;
     }
 
     private void selection() {
@@ -122,9 +122,11 @@ public class GeneticAlgorithm {
 
         long maxFitness = population.getTimetables()[0].getMaxFitness();
 
+        previousFittestValue = population.getFittest().getFitness();
+
         //While population does not get an individual with maximum fitness
         // and generation counter is smaller than generations number limit
-        while (population.getFittestValue() < maxFitness && generationCount < generationsLimit) {
+        while (population.getFittestValue() < maxFitness && (generationCount < generationsLimit && stepsAfterFittestValueChange < fromFittestValueChangeMaxSteps)) {
             ++generationCount;
 
             //Do selection
@@ -148,6 +150,13 @@ public class GeneticAlgorithm {
                 maxFitnessValue = population.getFittest().getFitness();
                 // System.out.println(maxFitnessValue + "----------------------");
                 maxFitnessTimetable = population.getFittest().getDeepCopy();
+            }
+
+            stepsAfterFittestValueChange++;
+
+            if (previousFittestValue != population.getFittest().getFitness()) {
+                previousFittestValue = population.getFittest().getFitness();
+                stepsAfterFittestValueChange = 0;
             }
 
             System.out.println("Generation: " + generationCount + " Fittest: " + population.getFittestValue());
