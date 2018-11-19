@@ -10,6 +10,39 @@ public class Ant {
     private double pheromone[][];
     private double total[][];  //keeps heuristic information times pheromone for each arc
 
+    protected int trailSize;
+    protected int trail[];
+    protected boolean visited[];
+
+    public Ant(int tourSize) {
+        this.trailSize = tourSize;
+        this.trail = new int[tourSize];
+        this.visited = new boolean[tourSize];
+    }
+
+    protected void visitCity(int currentIndex, int city) {
+        trail[currentIndex + 1] = city;
+        visited[city] = true;
+    }
+
+    protected boolean visited(int i) {
+        return visited[i];
+    }
+
+    protected double trailLength(double graph[][]) {
+        double length = graph[trail[trailSize - 1]][trail[0]];
+        for (int i = 0; i < trailSize - 1; i++) {
+            length += graph[trail[i]][trail[i + 1]];
+        }
+        return length;
+    }
+
+    protected void clear() {
+        for (int i = 0; i < trailSize; i++)
+            visited[i] = false;
+    }
+
+
     public Ant(List<Subject> subjects) {
         this.subjects = subjects;
     }
@@ -62,7 +95,10 @@ public class Ant {
 //        return subjectHashMap;
         HashMap<String, Subject> subjectHashMap = new HashMap<>();
         for (Subject subject : this.subjects){
-            subjectHashMap.put("DAY"+subject.getDay()+"NAME"+subject.getSubjectName()+"TYPE"+subject.getType(), subject);
+            switch (subject.getDay()){
+                case (1):  subjectHashMap.put("DAY"+subject.getDay()+"NAME"+subject.getSubjectName()+"TYPE"+subject.getType(), subject);
+            }
+
         }
         return subjectHashMap;
     }
