@@ -20,9 +20,9 @@ public class Ant {
         this.visited = new boolean[tourSize];
     }
 
-    protected void visitCity(int currentIndex, int city) {
-        trail[currentIndex + 1] = city;
-        visited[city] = true;
+    protected void visitSubject(int currentIndex, int subject) {
+        trail[currentIndex + 1] = subject;
+        visited[subject] = true;
     }
 
     protected boolean visited(int i) {
