@@ -42,7 +42,7 @@ public class Main {
         storage.addSubject(new Subject("Automaatjuhtimissüsteemid (ISS0121) praktikum", 0, "11:50", "13:20"));
         storage.addSubject(new Subject("Automaatjuhtimissüsteemid (ISS0121) praktikum", 2, "12:00", "13:30"));
         storage.addSubject(new Subject("Automaatjuhtimissüsteemid (ISS0121) praktikum", 4, "16:00", "17:30"));
-        storage.addSubject(new Subject("Andmebaasid II (IDU0230) loeng", 2, "14:00", "15:30"));
+        storage.addSubject(new Subject("Andmebaasid II (IDU0230) loeng", 2, "14:00", "15:30","16:10"));
         storage.addSubject(new Subject("Andmebaasid II (IDU0230) harjutus", 0, "12:00", "13:30"));
         storage.addSubject(new Subject("Andmebaasid II (IDU0230) harjutus", 0, "16:00", "17:30"));
         storage.addSubject(new Subject("Andmebaasid II (IDU0230) harjutus", 1, "8:00", "9:30"));
@@ -58,11 +58,17 @@ public class Main {
         storage.addSubject(new Subject("Loogiline programmeerimine (ITI0021) praktikum", 1, "10:00", "11:30"));
         storage.addSubject(new Subject("Loogiline programmeerimine (ITI0021) praktikum", 1, "14:00", "15:30"));
         storage.addSubject(new Subject("Loogiline programmeerimine (ITI0021) praktikum", 2, "12:00", "13:30"));
-        storage.addSubject(new Subject("Digitaalsüsteemid (IAY0150) loeng", 3, "9:50", "11:20"));
+        storage.addSubject(new Subject("Digitaalsüsteemid (IAY0150) loeng", 3, "9:50", "11:20", "12:00"));
         storage.addSubject(new Subject("Digitaalsüsteemid (IAY0150) praktikum+harjutus", 3, "17:45", "19:15"));
         storage.addSubject(new Subject("Digitaalsüsteemid (IAY0150) praktikum+harjutus", 4, "8:00", "9:30"));
         storage.addSubject(new Subject("Digitaalsüsteemid (IAY0150) praktikum+harjutus", 4, "10:00", "11:30"));
         storage.addSubject(new Subject("Digitaalsüsteemid (IAY0150) praktikum+harjutus", 4, "12:00", "13:30"));
+        storage.addSubject(new Subject("Sportsaalis treenimine", 6, "10:00", "12:00"));
+        storage.addSubject(new Subject("Sportsaalis treenimine", 5, "10:00", "12:00"));
+        storage.addSubject(new Subject("Sõbra sünnipäeva külastamine", 5, "18:00", "21:00"));
+        storage.addSubject(new Subject("Kinos käimine", 5, "14:20", "17:00"));
+        storage.addSubject(new Subject("Kinos käimine", 6, "14:20", "17:00"));
+
 
         GeneticAlgorithm algorithm = new GeneticAlgorithm(30, Integer.MAX_VALUE, 150, storage);
         Timetable timetable = algorithm.findFittestTimetable();

@@ -124,6 +124,8 @@ public class GeneticAlgorithm {
 
         previousFittestValue = population.getFittest().getFitness();
 
+         long time = System.currentTimeMillis();
+
         //While population does not get an individual with maximum fitness
         // and generation counter is smaller than generations number limit
         while (population.getFittestValue() < maxFitness && (generationCount < generationsLimit && stepsAfterFittestValueChange < fromFittestValueChangeMaxSteps)) {
@@ -162,6 +164,8 @@ public class GeneticAlgorithm {
             System.out.println("Generation: " + generationCount + " Fittest: " + population.getFittestValue());
         }
 
+        time = System.currentTimeMillis() - time;
+
         System.out.println("\nSolution found in generation " + generationCount);
         System.out.println("Fitness: " + population.getFittest().getFitness() + "   Max Fitness: " + population.getTimetables()[0].getMaxFitness());
         System.out.println("Genes: ");
@@ -173,6 +177,8 @@ public class GeneticAlgorithm {
         System.out.println("Fitness: " + maxFitnessTimetable.getFitness() + "   Max Fitness: " + population.getTimetables()[0].getMaxFitness());
         System.out.println("Genes: ");
         maxFitnessTimetable.printTimetable();
+
+        System.out.println("\nTime: " + time + " milliseconds");
 
         return maxFitnessTimetable;
     }
