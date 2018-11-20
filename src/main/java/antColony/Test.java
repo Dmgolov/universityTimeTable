@@ -166,14 +166,14 @@ public class Test {
                 LocalTime.of(11, 50),
                 LocalTime.of(13, 20), "Aleksei", "U05");
         Subject ISS0121_pra = new Subject("Automaatjuhtimissüsteemid", 3, "pra",
-                LocalTime.of(14, 0),
-                LocalTime.of(15, 30), "Andres", "U05");
+                LocalTime.of(12, 0),
+                LocalTime.of(13, 30), "Andres", "U05");
         Subject ISS0121_pra2 = new Subject("Automaatjuhtimissüsteemid", 5, "pra",
                 LocalTime.of(16, 0),
                 LocalTime.of(17, 30), "Andres", "U05");
         Subject ITI0050 = new Subject("Algoritmid ja andmestruktuurid", 1, "lec",
                 LocalTime.of(10, 0),
-                LocalTime.of(11,30), "Marko", "U06");
+                LocalTime.of(11, 30), "Marko", "U06");
 //        Subject ITI0050_1 = new Subject("Algoritmid ja andmestruktuurid", 3, "lec",
 //                LocalTime.of(10, 0),
 //                LocalTime.of(11,30), "Marko", "U06");
@@ -182,10 +182,33 @@ public class Test {
 //                LocalTime.of(11,30), "Marko", "U06");
         Subject ITI0050_3 = new Subject("Algoritmid ja andmestruktuurid", 3, "pra",
                 LocalTime.of(8, 0),
-                LocalTime.of(9,30), "Marko", "U06");
+                LocalTime.of(9, 30), "Marko", "U06");
         Subject ITI0050_4 = new Subject("Algoritmid ja andmestruktuurid", 5, "pra",
                 LocalTime.of(14, 0),
-                LocalTime.of(15,30), "Marko", "U06");
+                LocalTime.of(15, 30), "Marko", "U06");
+        Subject IDU0230 = new Subject("Andmebaasid II", 1, "har",
+                LocalTime.of(12, 0),
+                LocalTime.of(13, 30), "ERKI", "U06");
+        Subject IDU0230_1 = new Subject("Andmebaasid II", 1, "har",
+                LocalTime.of(16, 0),
+                LocalTime.of(17, 30), "ERKI", "U06");
+        Subject IDU0230_2 = new Subject("Andmebaasid II", 2, "har",
+                LocalTime.of(8, 0),
+                LocalTime.of(9, 30), "ERKI", "U06");
+        Subject IDU0230_3 = new Subject("Andmebaasid II", 2, "har",
+                LocalTime.of(12, 0),
+                LocalTime.of(13, 30), "ERKI", "U06");
+        Subject IDU0230_4 = new Subject("Andmebaasid II", 3, "har",
+                LocalTime.of(10, 0),
+                LocalTime.of(11, 30), "ERKI", "U06");
+        Subject IDU0230_5 = new Subject("Andmebaasid II", 3, "har",
+                LocalTime.of(12, 0),
+                LocalTime.of(13, 30), "ERKI", "U06");
+        Subject IDU0230_6 = new Subject("Andmebaasid II", 3, "lec",
+                LocalTime.of(14, 0),
+                LocalTime.of(15, 30), "ERKI", "U06");
+
+
         List<Subject> subjects = new ArrayList<>();
         subjects.add(ISS0110);
         subjects.add(ISS0110_2);
@@ -210,8 +233,21 @@ public class Test {
         subjects.add(ISS0121_pra2);
         System.out.println("Ant Colony Optimization");
 
-        AntColony antColony = new AntColony(10);
+//        antColony.startAntOptimization();
+        Subject[] monday = new Subject[]{IDU0230, IDU0230_1, ITI0050, ISS0121};
+        Subject[] tuesday = new Subject[]{IDU0230_2, IDU0075, ISS0110_3, ISS0121_lec, IDU0075_1, ITI0021, ITI0021_1};
+        Subject[] wednesday = new Subject[]{ITI0050_3, ITI0021_2, ITI0021_3, IDU0230_6, ISS0121_pra};
+        Subject[] thursday = new Subject[]{ISS0110, ISS0110_2, IAY0150, IAY0150_pra2};
+        Subject[] friday = new Subject[]{IAY0150_pra3, IAY0150_pra4, IAY0150_pra5, ISS0121_pra2};
+        Subject[][] graph = new Subject[][]{monday};
+//        , tuesday, wednesday, thursday, friday
+
+        System.out.println("SIZE " +graph[0].length );
+        AntColony antColony = new AntColony(graph);
         antColony.startAntOptimization();
+
+//        System.out.println(Arrays.deepToString(subjects1));
+//        System.out.println(subjects1[0][0]);
 
     }
 }

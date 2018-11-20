@@ -30,8 +30,8 @@ public class AntColony {
     private int[] bestTourOrder;
     private double bestTourLength;
 
-    public AntColony(int noOfCities) {
-        graph = generateRandomMatrix(noOfCities);
+    public AntColony(Subject[][] noOfSubject) {
+        graph = generateInitialTimetable(noOfSubject);
         numberOfSubjects = graph.length;
         numberOfAnts = (int) (numberOfSubjects * antFactor);
 
@@ -44,10 +44,31 @@ public class AntColony {
     /**
      * Generate initial solution
      */
-    public double[][] generateRandomMatrix(int n) {
-        double[][] randomMatrix = new double[n][n];
-        IntStream.range(0, n)
-                .forEach(i -> IntStream.range(0, n)
+    public double[][] generateInitialTimetable(Subject[][] subjects) {
+//        Subject[][] initialMatrix = subjects;
+//        System.out.println(initialMatrix[0][1]);
+        double[][] initalResult = new double[subjects[0].length][subjects[0].length];
+        int max = 0;
+//        initalResult = new double[subjects.length][max];
+        for (int i = 0; i < subjects[0].length; i++) {
+            for (int x = 0; x < subjects[0].length; x++){
+//                Double.valueOf(String.valueOf(subjects[0][x].getEnd()).split(":")[0]);
+                for (int j = 0; j < subjects[0].length; j++){
+                    System.out.println(subjects[0][x].getStart() + " S " + subjects[0][j].getStart());
+                    System.out.println(subjects[0][x].getEnd() + " E " + subjects[0][j].getEnd());
+//                    if (subjects[])
+                    initalResult[i][x] =  Double.valueOf(String.valueOf(subjects[0][x].getEnd()).split(":")[0]);
+//                            - Double.valueOf(String.valueOf(subjects[0][j].getEnd()).split(":")[0]);
+
+                }
+
+            }
+        }
+        System.out.println(Arrays.deepToString(initalResult));
+        double[][] initialMatrix = new double[10][10];
+        double[][] randomMatrix = new double[10][10];
+        IntStream.range(0, 10)
+                .forEach(i -> IntStream.range(0, 10)
                         .forEach(j -> randomMatrix[i][j] = Math.abs(random.nextInt(100) + 1)));
         return randomMatrix;
     }
@@ -55,6 +76,7 @@ public class AntColony {
     /**
      * Perform ant optimization
      */
+
     public void startAntOptimization() {
         IntStream.rangeClosed(1, 3)
                 .forEach(i -> {
@@ -88,7 +110,7 @@ public class AntColony {
                 .forEach(i -> {
                     ants.forEach(ant -> {
                         ant.clear();
-                        ant.visitCity(-1, random.nextInt(numberOfSubjects));
+                        ant.visitSubject(-1, random.nextInt(numberOfSubjects));
                     });
                 });
         currentIndex = 0;
@@ -100,22 +122,22 @@ public class AntColony {
     private void moveAnts() {
         IntStream.range(currentIndex, numberOfSubjects - 1)
                 .forEach(i -> {
-                    ants.forEach(ant -> ant.visitCity(currentIndex, selectNextCity(ant)));
+                    ants.forEach(ant -> ant.visitSubject(currentIndex, selectNextSubject(ant)));
                     currentIndex++;
                 });
     }
 
     /**
-     * Select next city for each ant
+     * Select next subject for each ant
      */
-    private int selectNextCity(Ant ant) {
+    private int selectNextSubject(Ant ant) {
         int t = random.nextInt(numberOfSubjects - currentIndex);
         if (random.nextDouble() < randomFactor) {
-            OptionalInt cityIndex = IntStream.range(0, numberOfSubjects)
+            OptionalInt subjectIndex = IntStream.range(0, numberOfSubjects)
                     .filter(i -> i == t && !ant.visited(i))
                     .findFirst();
-            if (cityIndex.isPresent()) {
-                return cityIndex.getAsInt();
+            if (subjectIndex.isPresent()) {
+                return subjectIndex.getAsInt();
             }
         }
         calculateProbabilities(ant);
@@ -132,7 +154,7 @@ public class AntColony {
     }
 
     /**
-     * Calculate the next city picks probabilites
+     * Calculate the next subject picks probabilites
      */
     public void calculateProbabilities(Ant ant) {
         int i = ant.trail[currentIndex];
@@ -197,7 +219,6 @@ public class AntColony {
                             .forEach(j -> trails[i][j] = c);
                 });
     }
-
 
 
     public void setSubjects(List<Subject> subjects) {
